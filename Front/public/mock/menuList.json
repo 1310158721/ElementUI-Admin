@@ -1,0 +1,76 @@
+{
+  "result": [
+    {
+      "title": "Dashboard",
+      "children": null,
+      "permission": "DASHBOARD"
+    },
+    {
+      "title": "路由嵌套",
+      "children": [
+        {
+          "title": "菜单1",
+          "children": [
+            {
+              "title": "菜单1-1",
+              "children": null,
+              "permission": "MENU1-1"
+            },
+            {
+              "title": "菜单1-2",
+              "children": [
+                {
+                  "title": "菜单1-2-1",
+                  "children": null,
+                  "permission": "MENU1-2-1"
+                },
+                {
+                  "title": "菜单1-2-2",
+                  "children": null,
+                  "permission": "MENU1-2-2"
+                },
+                {
+                  "title": "菜单1-2-3",
+                  "children": null,
+                  "permission": "MENU1-2-3"
+                }
+              ]
+            },
+            {
+              "title": "菜单1-3",
+              "children": null,
+              "permission": "MENU1-3"
+            }
+          ]
+        },
+        {
+          "title": "菜单2",
+          "children": null,
+          "permission": "MENU2"
+        }
+      ]
+    },
+    {
+      "title": "组件",
+      "children": [
+        {
+          "title": "Echarts",
+          "children": [
+            {
+              "title": "Pie",
+              "children": null,
+              "permission": "PIE"
+            }
+          ]
+        },
+        {
+          "title": "BaiduMap",
+          "children": null,
+          "permission": "BAIDUMAP"
+        }
+      ]
+    }
+  ],
+  "msg": "请求成功",
+  "status": 0
+}
