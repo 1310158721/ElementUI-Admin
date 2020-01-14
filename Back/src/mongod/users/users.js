@@ -20,8 +20,8 @@ class USER {
       desc: String,
       token: String,
       role: String,
-      roleDesc: String,
-      username: String
+      username: String,
+      createdTime: Number
     });
 
     // 用户数据 Model(表的名称不能大写)
@@ -105,41 +105,57 @@ class USER {
    */
   GetAllUserInfos() {
     this.app.get('/api/getAllUserInfos', (req, res, next) => {
-      const { page = 1, size = 20, keyword = '' } = req.query;
+      let { page = 1, size = 20, keyword = '', startTime = '', endTime = '', roleLevel = '' } = req.query;
+
+      // 时间临界值处理
+      startTime = startTime ? new Date(startTime + " 00:00:00") : null;
+      endTime = endTime ? new Date(endTime + ' 23:59:59') : null;
 
       const conditions = {
         // 搜索条件的交集 $and
         $and: [
           {
+            // 关键字模糊搜索
             $or: [
               { username: { $regex: keyword, $options: '$i' } },
-              { roleDesc: { $regex: keyword, $options: '$i' } },
               { desc: { $regex: keyword, $options: '$i' } }
             ]
           }
         ]
       }
+      // 添加时间段搜索
+      if (startTime && endTime) {
+        conditions.$and.push({ createdTime: {$gte: new Date(startTime), $lte: new Date(endTime)} })
+      }
+
+      if (roleLevel) {
+        conditions.$and.push({ role: roleLevel })
+      }
+
       // 查询总条数
       this.UserModel.countDocuments(conditions).then((count) => {
         // 查询列表数据
-        this.UserModel.find(conditions).limit(Number.parseInt(size)).skip(Number.parseInt(page - 1) * size)
-        .then((doc) => {
-          res.send({
-            result: {
-              list: doc,
-              count
-            },
-            status: 0,
-            msg: '查询所有用户数据成功'
-          })
-        })
-        .catch((err) => {
-          res.send({
-            result: err,
-            status: 0,
-            msg: '查询所有用户数据失败'
-          })
-        })
+        this.UserModel.find(conditions)
+          .limit(Number.parseInt(size))
+          .skip(Number.parseInt(page - 1) * size)
+          .sort({createdTime: -1})
+            .then((doc) => {
+              res.send({
+                result: {
+                  list: doc,
+                  count
+                },
+                status: 0,
+                msg: '查询所有用户数据成功'
+              })
+            })
+            .catch((err) => {
+              res.send({
+                result: err,
+                status: 0,
+                msg: '查询所有用户数据失败'
+              })
+            })
       });
     })
   }

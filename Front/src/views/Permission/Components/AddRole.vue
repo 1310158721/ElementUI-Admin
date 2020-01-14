@@ -11,6 +11,36 @@
     modal-append-to-body
     :close-on-click-modal='false'
   >
+    <el-form
+      ref="form"
+      :model="addRoleModel"
+      label-position="left"
+      label-width="96px"
+      v-loading='!isLoaded'
+    >
+      <el-form-item size='small' label="用户账号:">
+        <el-input size='small' v-model="addRoleModel.account"></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="用户密码:">
+        <el-input size='small' v-model="addRoleModel.password"></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="用户名称:">
+        <el-input size='small' v-model="addRoleModel.username"></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="用户名称:">
+        <el-select size="small" clearable v-model="addRoleModel.role" placeholder="请选择用户权限级别">
+          <el-option
+            v-for="item in roleEnum"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item size='small' label="用户描述:">
+        <el-input type='textarea' :autosize='{ minRows: 6, maxRows: 8 }' size='small' v-model="addRoleModel.desc"></el-input>
+      </el-form-item>
+    </el-form>
   </el-dialog>
 </template>
 
@@ -26,6 +56,7 @@ export default {
   },
   data () {
     return {
+      isLoaded: true,
       addRoleModel: {
         account: '',
         password: '',
@@ -36,9 +67,18 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    roleEnum () {
+      return [
+        { value: 'COMMON', label: '普通用户' },
+        { value: 'SUPERADMIN', label: '超级管理员' }
+      ];
+    }
+  },
   methods: {
-    closeAddRoleDialog () {},
+    closeAddRoleDialog () {
+      this.$emit('closeAddRoleDialog');
+    },
     openAddRoleDialog () {}
   },
   created () {},

@@ -5,6 +5,7 @@ import store from './store';
 import axios from 'axios';
 import '@/http/interceptors';
 import '@/assets/js/directive';
+import '@/assets/css/custom.css';
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
