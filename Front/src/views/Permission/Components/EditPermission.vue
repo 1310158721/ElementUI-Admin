@@ -87,7 +87,7 @@ export default {
         return callback(new Error('用户权限不能为空'));
       }
       callback();
-    }
+    };
     return {
       editPermissionModel: {
         account: '',

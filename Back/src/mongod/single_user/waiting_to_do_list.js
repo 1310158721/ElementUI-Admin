@@ -50,8 +50,41 @@ class WAITINGTODOLIST {
     })
   }
 
+  /**
+   * 修改单条数据信息
+   */
+  updateWaitingItemStatus () {
+    this.app.post('/api/updateWaitingItemStatus', (req, res, next) => {
+      const { status, _id } = req.body;
+      this.WaitingToDoModel.findOneAndUpdate({ _id }, { status })
+        .then((doc) => {
+          if (doc) {
+            res.send({
+              result: doc,
+              msg: '修改单条数据成功',
+              status: 0
+            })
+          } else {
+            res.send({
+              result: err,
+              msg: '修改单条数据失败',
+              status: 400
+            })
+          }
+        })
+        .catch((err) => {
+          res.send({
+            result: err,
+            msg: '修改单条数据出错了',
+            status: 400
+          })
+        })
+    });
+  }
+
   Start() {
     this.GetWaitingToDoList();
+    this.updateWaitingItemStatus();
   };
 }
 
