@@ -19,6 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // 全局拦截所有请求，做相关的操作
 app.all('*', (req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return false;
+  }
   // 支持跨域
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type');

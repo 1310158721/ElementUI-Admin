@@ -54,11 +54,11 @@
             <el-button
               type="primary"
               v-permission="'SUPERADMIN'"
-              size="small"
+              size="mini"
               @click="throttleHandleEdit(scope.row)"
               >编辑权限</el-button
             >
-            <el-button type="warning" size="small" @click="handleDel(scope.row)"
+            <el-button type="warning" size="mini" @click="handleDel(scope.row)"
               >删除</el-button
             >
           </template>
@@ -234,6 +234,7 @@ export default {
     },
     closeAddRoleDialog () {
       this.addRoleDialog = false;
+      this.getRoleList();
     }
   },
   filters: {

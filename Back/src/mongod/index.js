@@ -1,2 +1,3 @@
-const user = require('./users/users');
-const menu = require('./users/menu');
+const USER = require('./users/users');
+const MENU = require('./users/menu');
+const WAITINGTODOLIST = require('./single_user/waiting_to_do_list');

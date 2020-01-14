@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="权限编辑"
+    title="权限角色"
     class="permission-dialog"
     :visible.sync="permissionDialogVisible"
     width="600px"
@@ -16,31 +16,35 @@
       :model="editPermissionModel"
       label-position="left"
       label-width="96px"
+      :rules='editPermissionRules'
       v-loading='!isLoaded'
     >
-      <el-form-item size="small" label="用户等级:" prop="role">
-        <el-radio-group v-model="editPermissionModel.role">
-          <el-radio
+      <el-form-item size='small' label="用户账号:" prop='account'>
+        <el-input size='small' v-model="editPermissionModel.account" placeholder='请输入用户账号' />
+      </el-form-item>
+      <el-form-item size='small' label="用户密码:" prop='password'>
+        <el-input size='small' v-model="editPermissionModel.password" placeholder='请输入用户密码'></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="电话号码:" prop='mobile'>
+        <el-input size='small' v-model="editPermissionModel.mobile" placeholder='请输入电话号码'></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="用户名称:" prop='username'>
+        <el-input size='small' v-model="editPermissionModel.username" placeholder='请输入用户名称'></el-input>
+      </el-form-item>
+      <el-form-item size='small' label="用户级别:" prop='role'>
+        <el-select size="small" clearable v-model="editPermissionModel.role" placeholder="请选择用户权限级别">
+          <el-option
             v-for="item in roleEnum"
-            :key="item.id"
+            :key="item.value"
             :label="item.label"
-            >{{ item.title }}</el-radio
-          >
-        </el-radio-group>
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item size="small" label="用户名称:" prop="username">
-        <el-input v-model="editPermissionModel.username" />
+      <el-form-item size='small' label="用户描述:" prop='desc'>
+        <el-input type='textarea' placeholder='请输入用户相关的描述' :autosize='{ minRows: 6, maxRows: 8 }' size='small' v-model="editPermissionModel.desc"></el-input>
       </el-form-item>
-      <el-form-item size="small" label="用户描述:" prop="desc">
-        <el-input
-          maxlength="200"
-          show-word-limit
-          :autosize="{ minRows: 5, maxRows: 8 }"
-          type="textarea"
-          v-model="editPermissionModel.desc"
-        />
-      </el-form-item>
-      <el-form-item size="small" label="权限列表:" prop="permission">
+      <el-form-item v-if='editPermissionModel.list' size="small" label="权限列表:" prop="permission">
         <el-tree
           :data="editPermissionModel.list"
           show-checkbox
@@ -55,7 +59,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button size='small' @click="closeEditPermissionDialog">取 消</el-button>
-      <el-button size='small' type="primary" @click="editPermissionDialogSure"
+      <el-button size='small' :loading='isUploading' type="primary" @click="editPermissionDialogSure"
         >确 定</el-button
       >
     </span>
@@ -63,6 +67,7 @@
 </template>
 
 <script>
+import { RegExp } from '@/assets/js/constant';
 export default {
   name: 'EditPermissionDialog',
   components: {},
@@ -77,27 +82,65 @@ export default {
     }
   },
   data () {
+    const isPermissionEmpty = (rule, value, callback) => {
+      if (!value || !value.length) {
+        return callback(new Error('用户权限不能为空'));
+      }
+      callback();
+    }
     return {
       editPermissionModel: {
+        account: '',
+        password: '',
+        avatar: '',
         role: 'COMMON',
+        mobile: '',
         username: '',
         desc: '',
         list: null,
         permission: []
       },
+      editPermissionRules: {
+        account: [
+          { required: true, message: '请输入活动名称' },
+          { pattern: RegExp.ACCOUNT, message: '账号格式不正确' }
+        ],
+        password: [
+          { required: true, message: '请输入用户密码' },
+          { pattern: RegExp.PASSWORD, message: '密码格式不正确' }
+        ],
+        username: [
+          { required: true, message: '请输入用户名称' },
+          { pattern: RegExp.USERNAME, message: '名称格式不正确' }
+        ],
+        mobile: [
+          { required: true, message: '请输入手机号码' },
+          { pattern: RegExp.MOBILE, message: '手机格式不正确' }
+        ],
+        role: [
+          { required: true, message: '用户等级不能为空' }
+        ],
+        desc: [
+          { required: true, message: '用户描述不能为空' }
+        ],
+        permission: [
+          { validator: isPermissionEmpty }
+        ]
+      },
       defaultProps: {
         children: 'children',
         label: 'title'
       },
-      isLoaded: true
+      isLoaded: true,
+      isUploading: false
     };
   },
   computed: {
     // 用户等级枚举
     roleEnum () {
       return [
-        { title: '普通用户', label: 'COMMON' },
-        { title: '超级管理员', label: 'SUPERADMIN' }
+        { label: '普通用户', value: 'COMMON' },
+        { label: '超级管理员', value: 'SUPERADMIN' }
       ];
     }
   },
@@ -109,7 +152,8 @@ export default {
     },
     // 更新用户信息
     async updatePermissionInfo (params = {}) {
-      return await this.$axios.get('/updateSingleUserInfo', { params });
+      this.isUploading = true;
+      return await this.$axios.post('/updateSingleUserInfo', params);
     },
     openEditPermissionDialog () {
       this.getPermissionInfo({ roleId: this.roleId }).then(res => {
@@ -117,18 +161,26 @@ export default {
         if (status === 0) {
           this.isLoaded = true;
           this.editPermissionModel = result;
+          console.log(this.editPermissionModel);
         }
       });
     },
     closeEditPermissionDialog () {
+      if (this.isUploading) {
+        return false;
+      }
       this.$emit('closeEditPermissionDialog');
     },
     formEditPermissionModel () {
-      const { role, username, desc } = this.editPermissionModel;
+      const { role, username, desc, account, password, avatar, mobile  } = this.editPermissionModel;
       let selectPermissionKey = this.$refs.tree.getCheckedKeys();
       selectPermissionKey = selectPermissionKey.filter((i) => i).join(',');
       const result = {
+        account,
+        password,
+        avatar,
         role,
+        mobile,
         username,
         permission: selectPermissionKey,
         desc,
@@ -141,6 +193,7 @@ export default {
         .then((res) => {
           const { status } = res.data;
           if (status === 0) {
+            this.isUploading = false;
             this.$emit('closeEditPermissionDialog');
           }
         });

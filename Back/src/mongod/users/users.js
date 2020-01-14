@@ -261,8 +261,8 @@ class USER {
    */
   AddSingleUser () {
     this.app.get('/api/addSingleUser', (req, res, next) => {
-      const { account, password, role, username, permission, desc } = req.query;
-      if (!account || !password || !role || !username || !permission || !desc) {
+      const { account = '', password = '', role = '', username = '', permission = '', desc = '', mobile = '', avatar = ''  } = req.query;
+      if (!account || !password || !role || !username || !permission || !desc || !mobile) {
         res.send({
           result: null,
           status: 0,
@@ -281,7 +281,7 @@ class USER {
             })
           } else {
             const singleDataUserModel = this.UserModel;
-            const insertUser = new singleDataUserModel({ account, password, role, username, permission, desc });
+            const insertUser = new singleDataUserModel({ account, password, role, username, permission, desc, mobile, avatar, token: account, createdTime: Date.now() });
             insertUser.save()
               .then((doc) => {
                 res.send({
@@ -313,9 +313,10 @@ class USER {
    * 更新单个用户信息，用于编辑权限列表后的更新
    */
   UpdateSingleUserInfo () {
-    this.app.get('/api/updateSingleUserInfo', (req, res, next) => {
-      const { username, desc, role, roleId, permission } = req.query;
-      if (!username || !desc || !roleId || !role || !permission) {
+    this.app.post('/api/updateSingleUserInfo', (req, res, next) => {
+      console.log(req.body);
+      const { username, desc, role, roleId, permission, account, avatar, mobile, password } = req.body;
+      if (!username || !desc || !roleId || !role || !permission || !account || !mobile || !password) {
         res.send({
           result: null,
           status: 400,
@@ -323,7 +324,7 @@ class USER {
         });
         return;
       }
-      this.UserModel.findByIdAndUpdate(roleId, { username, desc, role, permission })
+      this.UserModel.findByIdAndUpdate(roleId, { username, desc, role, roleId, permission, account, avatar, mobile, password })
         .then(() => {
           res.send({
             result: null,

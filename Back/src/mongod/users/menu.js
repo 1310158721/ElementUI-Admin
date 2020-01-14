@@ -73,7 +73,31 @@ class MENU {
   }
 
   /**
-   * 获取菜单栏接口
+   * 获取菜单栏所有项
+   */
+  getAllMenuItem() {
+    this.app.get('/api/getAllMenuItem', (req, res, next) => {
+      this.MenuListModel.find()
+        .then((doc) => {
+          if (!doc.length) {
+            res.send({
+              result: null,
+              status: 0,
+              msg: '获取菜单栏所有项失败'
+            })
+          } else{
+            res.send({
+              result: doc,
+              status: 0,
+              msg: '获取菜单栏所有数据成功'
+            })
+          }
+        })
+    })
+  }
+
+  /**
+   * 获取单个用户权限菜单菜单栏接口
    */
   getMenuList() {
     this.app.get('/api/getMenuList', (req, res, next) => {
@@ -89,7 +113,7 @@ class MENU {
               msg: '暂无该用户信息'
             })
           } else {
-            const { username, desc, permission, role } = doc[0];
+            const { username, desc, permission, role, avatar, mobile, password, account } = doc[0];
             const hasPermission = permission.split(',');
             this.MenuListModel
               .find({})
@@ -99,11 +123,11 @@ class MENU {
                   this.loopMatchList(hasPermission, list);
                   this.delEmptyArray(list);
                 }
-                const result = inside ? Object.assign({}, { list, username, desc, role, permission: permission ? permission.split(',') : [] }) : {list};
+                const result = inside ? Object.assign({}, { list, username, desc, role, permission: permission ? permission.split(',') : [], avatar, mobile, password, account }) : {list};
                 res.send({
                   result,
                   status: 0,
-                  msg: '获取全权限列表数据成功'
+                  msg: '获取权限列表数据成功'
                 })
               })
               .catch((err) => {
@@ -122,6 +146,7 @@ class MENU {
    * 指定开启接口
    */
   Start() {
+    this.getAllMenuItem();
     this.getMenuList();
   }
 }
