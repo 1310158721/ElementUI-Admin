@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { throttle } from '@/assets/js/utils';
+import { $throttle } from '@/assets/js/utils';
 export default {
   name: 'SearchBar',
   components: {},
@@ -38,7 +38,7 @@ export default {
       }
     },
     throttleSureKeyword () {
-      return throttle(() => this.sureKeyword(), 1000);
+      return $throttle(() => this.sureKeyword(), 1000);
     }
   },
   methods: {

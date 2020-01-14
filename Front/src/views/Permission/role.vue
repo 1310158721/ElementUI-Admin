@@ -2,6 +2,15 @@
   <div class="role-permission-wrapper">
     <div class="button-wrapper">
       <el-button type="primary" class="add-role" size="small" @click='addRole'>新增角色</el-button>
+      <el-date-picker
+        v-model="params.createdTime"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        size='small'
+        @change='timePickerChange'
+      />
       <span class="fixed-space"></span>
       <SearchBar class="search-bar" placeholder='Role/Username/Description' v-model='params.keyword' @sureKeyword='sureKeyword' />
     </div>
@@ -14,6 +23,11 @@
         </el-table-column>
         <el-table-column prop="username" label="Username" width="180" align='center' />
         <el-table-column prop="desc" label="Description" align='center' />
+        <el-table-column label="createdTime" align='center'>
+          <template slot-scope="scope">
+            <span>{{ scope.row.createdTime | formatTime }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="Operations" align='center'>
           <template slot-scope="scope">
             <el-button type="primary" v-permission='"SUPERADMIN"' size="small" @click='throttleHandleEdit(scope.row)'>编辑权限</el-button>
@@ -51,7 +65,8 @@
 <script>
 import EditPermissionDialog from './Components/EditPermission';
 import AddRole from './Components/AddRole';
-import { throttle } from '@/assets/js/utils';
+import { $throttle, $formDate } from '@/assets/js/utils';
+
 export default {
   name: 'RolePermission',
   components: {
@@ -68,7 +83,8 @@ export default {
       params: {
         page: 1,
         size: 20,
-        keyword: null
+        keyword: null,
+        createdTime: null
       },
       addRoleDialog: false
     };
@@ -76,16 +92,10 @@ export default {
   computed: {
     // 缓存节流函数(throttleHandleEdit接受的参数通过arguments内参传递给了throttle接受的函数)
     throttleHandleEdit () {
-      return throttle((row) => this.handleEdit(row), 2000);
+      return $throttle((row) => this.handleEdit(row), 2000);
     }
   },
   methods: {
-    formatParams () {
-      
-      // const result = Object.assign({}, this.params, {
-        
-      // });
-    },
     // 获取所有用户信息列表
     getRoleList () {
       this.rolePermissionList = null;
@@ -146,6 +156,9 @@ export default {
     },
     sureKeyword () {
       this.getRoleList();
+    },
+    timePickerChange(val) {
+      console.log(val);
     }
   },
   filters: {
@@ -158,6 +171,9 @@ export default {
         default:
           return '';
       }
+    },
+    formatTime(val) {
+      return $formDate(new Date(val), 'yyyy-MM-dd hh:mm:ss')
     }
   },
   created () {

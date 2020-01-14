@@ -49,7 +49,7 @@
 
 <script>
 import { RegExp } from '@/assets/js/constant';
-import { throttle } from '@/assets/js/utils';
+import { $throttle } from '@/assets/js/utils';
 export default {
   name: 'Login',
   components: {},
@@ -87,7 +87,7 @@ export default {
     },
     // 缓存节流函数(throttleSubmitForm接受的参数通过arguments内参传递给了throttle接受的函数)
     throttleSubmitForm () {
-      return throttle(formName => this.submitForm(formName), 2000);
+      return $throttle(formName => this.submitForm(formName), 2000);
     }
   },
   methods: {
