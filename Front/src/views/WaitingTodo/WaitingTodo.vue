@@ -30,7 +30,7 @@
       <el-table :data="list" border height="100%">
         <el-table-column
           prop="createdTime"
-          label="创建时间"
+          label="CreatedTime"
           width="180"
           align="center"
         >
@@ -38,9 +38,9 @@
             <span>{{ scope.row.createdTime | createdTimeFilter }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="content" label="内容" align="center">
+        <el-table-column prop="content" label="Content" align="center">
         </el-table-column>
-        <el-table-column label="状态" width="90" align="center">
+        <el-table-column label="Status" width="90" align="center">
           <template slot-scope="scope">
             <el-tag
               size="small"
@@ -92,12 +92,12 @@
 </template>
 
 <script>
-import { $formDate, $throttle } from "@/assets/js/utils";
+import { $formDate, $throttle } from '@/assets/js/utils';
 export default {
   name: 'WaitingToDoList',
   components: {},
   props: {},
-  data() {
+  data () {
     return {
       theTimeRange: null,
       params: {
@@ -111,7 +111,7 @@ export default {
       list: null,
       count: 0,
       pickerOptions: {
-        disabledDate(date) {
+        disabledDate (date) {
           return date > Date.now();
         }
       }
@@ -119,16 +119,16 @@ export default {
   },
   computed: {
     // 节流更改数据状态
-    throttleSetStatus() {
+    throttleSetStatus () {
       // 缓存节流函数(throttleSetStatus接受的参数通过arguments内参传递给了throttle接受的函数)
       return $throttle(row => this.setStatus(row), 1000);
     },
     // 节流新增数据
-    throttleAddWaitingitem() {
+    throttleAddWaitingitem () {
       return $throttle(() => this.addWaitingitem(), 1000);
     },
     timeRange: {
-      get() {
+      get () {
         return this.theTimeRange;
       },
       set (val) {
@@ -145,10 +145,10 @@ export default {
     }
   },
   methods: {
-    getWaitingToDoList() {
+    getWaitingToDoList () {
       this.list = null;
       this.$axios
-        .get("/getWaitingToDoList", { params: this.params })
+        .get('/getWaitingToDoList', { params: this.params })
         .then(res => {
           const { status, result } = res.data;
           if (status === 0) {
@@ -158,40 +158,39 @@ export default {
           }
         });
     },
-    addItem(data) {
+    addItem (data) {
       this.$axios.post('/addWaitingItem', data)
         .then((res) => {
           const { status } = res.data;
           if (status === 0) {
             this.getWaitingToDoList();
           }
-        })
+        });
     },
     async deleteItem (params) {
       return await this.$axios.get('/deleteWaitingItem', { params });
     },
-    sureKeyword() {
+    sureKeyword () {
       this.theTimeRange = null;
       this.params.startTime = null;
       this.params.endTime = null;
       this.params.status = null;
       this.getWaitingToDoList();
     },
-    setStatus(row) {
+    setStatus (row) {
       const { status, _id } = row;
       const postData = {
-        status: status === "0" ? "1" : "0",
+        status: status === '0' ? '1' : '0',
         _id
       };
-      const text = "此操作将该条数据设置为已完成状态, 是否继续";
-      this.$confirm(text, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      const text = '此操作将该条数据设置为已完成状态, 是否继续';
+      this.$confirm(text, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          const { _id } = row;
-          this.$axios.post("/updateWaitingItemStatus", postData).then(res => {
+          this.$axios.post('/updateWaitingItemStatus', postData).then(res => {
             const { status } = res.data;
             if (status === 0) {
               this.getWaitingToDoList();
@@ -200,20 +199,20 @@ export default {
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
+            type: 'info',
+            message: '已取消删除'
           });
         });
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.params.size = val;
       this.getWaitingToDoList();
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.params.page = val;
       this.getWaitingToDoList();
     },
-    addWaitingitem() {
+    addWaitingitem () {
       this.$prompt('请输入内容', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -223,19 +222,19 @@ export default {
           this.addItem({ content: value });
         }).catch(() => {});
     },
-    timePickerChange() {
+    timePickerChange () {
       this.params.keyword = null;
       this.params.status = null;
       this.getWaitingToDoList();
     },
-    selectStatus() {
+    selectStatus () {
       this.params.keyword = null;
       this.theTimeRange = null;
       this.params.startTime = null;
       this.params.endTime = null;
       this.getWaitingToDoList();
     },
-    handelDeleteItem(row) {
+    handelDeleteItem (row) {
       // console.log(row);
       const { _id } = row;
       this.deleteItem({ _id })
@@ -244,21 +243,21 @@ export default {
           if (status === 0) {
             this.getWaitingToDoList();
           }
-        })
+        });
     }
   },
   filters: {
-    createdTimeFilter(val) {
-      return $formDate(new Date(val), "yyyy-MM-dd");
+    createdTimeFilter (val) {
+      return $formDate(new Date(val), 'yyyy-MM-dd hh:mm:ss');
     },
-    statusFilter(val) {
-      return val === "0" ? "已完成" : "未完成";
+    statusFilter (val) {
+      return val === '0' ? '已完成' : '未完成';
     }
   },
-  created() {
+  created () {
     this.getWaitingToDoList();
   },
-  mounted() {},
+  mounted () {},
   watch: {}
 };
 </script>

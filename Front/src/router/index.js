@@ -3,10 +3,10 @@ import VueRouter from 'vue-router';
 import store from '@/store';
 import asyncMenuRoutes from './asyncMenuRoutes';
 import $axios from 'axios';
-import jsCookie from 'js-cookie';// 页面加载进度条
+import jsCookie from 'js-cookie';
 import notMenuRoutes from './notMenuRoutes';
 
-import NProgress from 'nprogress';
+import NProgress from 'nprogress'; // 页面加载进度条
 import 'nprogress/nprogress.css';
 
 // NProgress 的简单配置
@@ -57,6 +57,8 @@ const getAsyncRoutes = (item) => {
   }
 };
 
+const cacheRoutes = jsCookie.get('cacheRoutes') ? JSON.parse(jsCookie.get('cacheRoutes')) : [];
+
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   
@@ -106,6 +108,10 @@ router.beforeEach((to, from, next) => {
             }
           });
       } else {
+        if (!cacheRoutes.filter((i) => i.path === to.path).length) {
+          cacheRoutes.push({ path: to.path, title: to.meta && to.meta.title || '' });
+          jsCookie.set('cacheRoutes', JSON.stringify(cacheRoutes));
+        }
         next();
       }
     }

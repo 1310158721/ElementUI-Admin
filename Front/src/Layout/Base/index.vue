@@ -3,6 +3,7 @@
     <my-aside />
     <el-container class="app-main-wrapper">
       <my-header />
+      <my-tab />
       <el-main>
         <router-view />
       </el-main>
@@ -14,12 +15,15 @@
 <script>
 import MyAside from './Aside';
 import MyHeader from './Header';
+import MyTab from './components/Tab';
 import LayoutConfig from '@/components/System/LayoutConfig';
 export default {
   name: 'LayoutBase',
   components: {
-    MyAside, MyHeader,
-    LayoutConfig
+    MyAside,
+    MyHeader,
+    LayoutConfig,
+    MyTab
   },
   props: {},
   data () {

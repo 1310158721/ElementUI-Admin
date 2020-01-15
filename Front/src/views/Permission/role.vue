@@ -124,7 +124,7 @@ export default {
       addRoleDialog: false,
       roleLevel: null,
       pickerOptions: {
-        disabledDate(date) {
+        disabledDate (date) {
           return date > Date.now();
         }
       }

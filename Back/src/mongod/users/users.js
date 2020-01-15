@@ -314,7 +314,6 @@ class USER {
    */
   UpdateSingleUserInfo () {
     this.app.post('/api/updateSingleUserInfo', (req, res, next) => {
-      console.log(req.body);
       const { username, desc, role, roleId, permission, account, avatar, mobile, password } = req.body;
       if (!username || !desc || !roleId || !role || !permission || !account || !mobile || !password) {
         res.send({
