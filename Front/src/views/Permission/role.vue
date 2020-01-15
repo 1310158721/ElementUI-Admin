@@ -13,6 +13,7 @@
         end-placeholder="结束日期"
         size="small"
         @change="timePickerChange"
+        :picker-options='pickerOptions'
       />
       <el-select size="small" clearable v-model="params.roleLevel" @change='roleLevelChange' placeholder="请选择用户权限级别">
         <el-option
@@ -67,6 +68,7 @@
     </div>
     <div class="pagination-wrapper">
       <el-pagination
+        v-if='rolePermissionList'
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="params.page"
@@ -120,7 +122,12 @@ export default {
         roleLevel: null
       },
       addRoleDialog: false,
-      roleLevel: null
+      roleLevel: null,
+      pickerOptions: {
+        disabledDate(date) {
+          return date > Date.now();
+        }
+      }
     };
   },
   computed: {
@@ -136,6 +143,7 @@ export default {
         if (!val) {
           this.params.startTime = null;
           this.params.ednTime = null;
+          this.theTimeRange = null;
         } else {
           this.theTimeRange = val;
           this.params.startTime = $formDate(val[0], 'yyyy-MM-dd');
@@ -282,6 +290,8 @@ export default {
   .pagination-wrapper {
     height: 32px;
     padding: 10px 0;
+    border: 1px #EBEEF5 solid;
+    border-top: none;
     .el-pagination {
       float: right;
     }

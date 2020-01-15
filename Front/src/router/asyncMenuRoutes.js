@@ -29,7 +29,7 @@ const asyncMenuRoutes = [
     meta: {
       title: '待办事项'
     },
-    component: () => import('@/views/WaitingTodo'),
+    component: () => import('@/views/WaitingTodo/WaitingTodo'),
     children: null
   },
   {
