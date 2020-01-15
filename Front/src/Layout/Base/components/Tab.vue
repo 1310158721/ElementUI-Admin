@@ -1,41 +1,81 @@
 <template>
-  <div class="my-tab-routes" v-if="tabRoutes.length">
-    <el-button :type='i.path === $route.path ? "success" : ""' @click='selectTab(i.path)' v-for="i in tabRoutes" :key="i.id" size="mini">{{
-      i.title
-    }}</el-button>
+  <div class="my-tab-routes" v-if='tabRoutes.length'>
+    <el-tabs v-model="activeName" @tab-click="handleClick" @tab-remove="removeTab">
+      <el-tab-pane v-for="(i) in tabRoutes" :key='i.path' :label="i.title" :name="i.path" :closable='i.path !== "/Dashboard"' />
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import jsCookie from 'js-cookie';
+import jsCookie from "js-cookie";
 export default {
-  name: 'MyTab',
+  name: "MyTab",
   components: {},
   props: {},
-  data () {
+  data() {
     return {
-      activeName: 'first',
+      activeName: null,
       tabRoutes: []
     };
   },
   computed: {},
   methods: {
-    handleClick (tab, event) {
-      console.log(tab, event);
-    },
-    selectTab (path) {
+    handleClick(tab, event) {
+      const { name } = tab;
+      if (name === this.$route.path) {
+        return;
+      }
       this.$router.push({
-        path
-      });
+        path: name
+      })
+    },
+    removeTab(targetName) {
+      // 总个数
+      const count = this.tabRoutes.length;
+      // 当前要删除的item的位置
+      let pos = 0;
+      for(let i=0;i<count; i++) {
+        if (this.tabRoutes[i].path === targetName) {
+          pos = i;
+          break;
+        }
+      }
+      // 当前要删除的是否为最后一项
+      if (pos === count - 1) {
+        // 是否为 active 项
+        if (this.$route.path === targetName) {
+          this.$router.push({
+            path: this.tabRoutes[pos - 1].path
+          });
+          this.tabRoutes.splice(pos, 1);
+          jsCookie.set('cacheRoutes', JSON.stringify(this.tabRoutes));
+        } else {
+          this.tabRoutes.splice(pos, 1);
+          jsCookie.set('cacheRoutes', JSON.stringify(this.tabRoutes));
+        }
+      } else {
+        if (this.$route.path === targetName) {
+          this.$router.push({
+            path: this.tabRoutes[pos + 1].path
+          });
+          this.tabRoutes.splice(pos, 1);
+          jsCookie.set('cacheRoutes', JSON.stringify(this.tabRoutes));
+        } else {
+          this.tabRoutes.splice(pos, 1);
+          jsCookie.set('cacheRoutes', JSON.stringify(this.tabRoutes));
+        }
+      }
     }
   },
-  created () {
-    this.tabRoutes = JSON.parse(jsCookie.get('cacheRoutes'));
+  created() {
+    this.activeName = this.$route.path;
+    this.tabRoutes = JSON.parse(jsCookie.get("cacheRoutes"));
   },
-  mounted () {},
+  mounted() {},
   watch: {
-    '$route.path' () {
-      this.tabRoutes = JSON.parse(jsCookie.get('cacheRoutes'));
+    "$route"(val) {
+      this.activeName = this.$route.path;
+      this.tabRoutes = JSON.parse(jsCookie.get("cacheRoutes"));
     }
   }
 };
@@ -43,33 +83,43 @@ export default {
 
 <style lang="scss" scoped>
 .my-tab-routes {
-  height: 36px;
-  padding: 4px 0 2px;
+  height: 32px;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  /* 设置滚动条的样式 */
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 4px;
+  .el-tabs {
+    height: 32px;
+    // overflow-y: hidden;
+    /deep/.el-tabs__nav-wrap::after {
+      display: none;
+    }
+    /deep/.el-tabs__active-bar {
+      display: none;
+    }
+    /deep/.el-tabs__item {
+      height: 28px;
+      line-height: 28px;
+      padding: 0;
+      margin: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid #d8dce5;
+      background-color: #fff;
+      padding: 0 10px;
+      outline: none;
+      &.is-active {
+        background-color: #42b983;
+        color: #fff;
+      }
+    }
+    /deep/.el-tabs__header {
+      margin: 0;
+    }
+    /deep/.el-tabs__nav-next, /deep/.el-tabs__nav-prev {
+      height: 32px;
+      line-height: 32px;
+    }
   }
-
-  // /* 滚动槽 */
-  // &::-webkit-scrollbar-track {
-  //   border-radius: 10px;
-  // }
-
-  // /* 滚动条滑块 */
-  // &::-webkit-scrollbar-thumb {
-  //   width: 200px !important;
-  //   border-radius: 10px;
-  //   background: rgba(0,0,0,.5);
-  //   padding: 0;
-  //   margin: 0;
-  // }
 }
 </style>

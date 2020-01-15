@@ -87,6 +87,7 @@ export default {
         type: 'warning'
       }).then(() => {
         Cookie.remove('token');
+        Cookie.remove('cacheRoutes');
         this.RESETMENULIST([]);
         this.$router.push({ path: '/Login', replace: true });
       }).catch(() => {});

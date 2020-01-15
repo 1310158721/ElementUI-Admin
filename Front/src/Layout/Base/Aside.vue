@@ -8,6 +8,7 @@
     mode="vertical"
     background-color='rgb(38, 52, 69)'
     text-color='rgb(191, 203, 217)'
+    unique-opened
   >
     <AsideItem
       v-for="(item, index) in list"
@@ -47,9 +48,31 @@ export default {
 <style lang="scss" scoped>
 .el-menu-vertical-demo {
   height: 100%;
+  min-width: 64px;
+  overflow-y: auto;
+  /* 设置滚动条的样式 */
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* 滚动槽 */
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  /* 滚动条滑块 */
+  &::-webkit-scrollbar-thumb {
+    width: 200px !important;
+    border-radius: 10px;
+    background: rgba(0,0,0,.5);
+    padding: 0;
+    margin: 0;
+  }
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+  max-height: 100vh;
 }
 </style>

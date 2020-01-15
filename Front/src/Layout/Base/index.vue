@@ -41,6 +41,7 @@ export default {
 #app-root-wrapper {
   width: 100vw;
   height: 100vh;
+  min-width: 1100px;
   .app-main-wrapper {
     display: flex;
     flex-direction: column;

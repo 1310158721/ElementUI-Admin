@@ -36,7 +36,14 @@ export default {
     }
   },
   created () {},
-  mounted () {},
+  mounted () {
+    window.onresize = () => {
+      if (window.innerWidth <= 900) {
+        this.isCollapse = true;
+        EventBus.$emit('switchMenuCollapse', true);
+      }
+    }
+  },
   watch: {}
 };
 </script>

@@ -5,6 +5,11 @@ import asyncMenuRoutes from './asyncMenuRoutes';
 import $axios from 'axios';
 import jsCookie from 'js-cookie';
 import notMenuRoutes from './notMenuRoutes';
+import devRoutes from './devRoutes';
+
+if (process.env.NODE_ENV === 'development') {
+  asyncMenuRoutes.push(...devRoutes);
+}
 
 import NProgress from 'nprogress'; // 页面加载进度条
 import 'nprogress/nprogress.css';
@@ -57,7 +62,7 @@ const getAsyncRoutes = (item) => {
   }
 };
 
-const cacheRoutes = jsCookie.get('cacheRoutes') ? JSON.parse(jsCookie.get('cacheRoutes')) : [];
+let cacheRoutes = jsCookie.get('cacheRoutes') ? JSON.parse(jsCookie.get('cacheRoutes')) : [ { path: '/Dashboard', title: 'Dashboard' } ];
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
@@ -91,6 +96,13 @@ router.beforeEach((to, from, next) => {
               $axios.get('/getMenuList', { params: { token } })
               .then((res) => {
                 const { list } = res.data.result;
+                if (process.env.NODE_ENV === 'development') {
+                  list.push({
+                    title: '方便测试',
+                    icon: 'icon-ceshi',
+                    children: null
+                  });
+                }
                 // 遍历获取菜单栏对应的路由以及重新处理菜单栏的数据（为每一项添加一个path属性）
                 list.map((i) => {
                   getAsyncRoutes(i);
@@ -108,10 +120,11 @@ router.beforeEach((to, from, next) => {
             }
           });
       } else {
-        if (!cacheRoutes.filter((i) => i.path === to.path).length) {
-          cacheRoutes.push({ path: to.path, title: to.meta && to.meta.title || '' });
-          jsCookie.set('cacheRoutes', JSON.stringify(cacheRoutes));
+        cacheRoutes = jsCookie.get('cacheRoutes') ? JSON.parse(jsCookie.get('cacheRoutes')) : [];
+        if (!cacheRoutes.filter((i) => i.path === to.path).length && !to.meta.isNotMenu) {
+          cacheRoutes = [...cacheRoutes, { path: to.path, title: to.meta && to.meta.title }]
         }
+        jsCookie.set('cacheRoutes', JSON.stringify(cacheRoutes));
         next();
       }
     }

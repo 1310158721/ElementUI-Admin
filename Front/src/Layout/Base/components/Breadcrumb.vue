@@ -63,7 +63,7 @@ export default {
           if (this.$route.path === i.path) {
             this.breadcrumb = this.breadcrumb.map((k) => !k.path ? ({ path: list[0].path, title: k.title }) : k);
             this.breadcrumb.push({ path: null, title: i.title });
-            if (this.breadcrumb[0].path && this.breadcrumb[0].path !== '/Dashboard') {
+            if (!this.breadcrumb.filter((i) => i.title === 'Dashboard').length) {
               this.breadcrumb.unshift({ path: '/Dashboard', title: 'Dashboard' });
             }
           }
