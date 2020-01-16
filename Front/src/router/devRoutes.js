@@ -8,6 +8,6 @@ const devRoutes = [
     component: () => import('@/views/Test/Test'),
     children: null
   }
-]
+];
 
 export default devRoutes;

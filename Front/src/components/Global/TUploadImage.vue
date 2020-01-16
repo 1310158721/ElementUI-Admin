@@ -22,7 +22,7 @@
 import { Message } from 'element-ui';
   export default {
     name: 'TUploadImage',
-    data() {
+    data () {
       return {
         dialogImageUrl: '',
         urlList: null
@@ -60,25 +60,25 @@ import { Message } from 'element-ui';
       }
     },
     methods: {
-      handlePictureCardPreview(file) {
+      handlePictureCardPreview (file) {
         this.dialogImageUrl = file.url;
       },
       successCallback (response, file, fileList) {
         this.urlList = fileList.map((i) => i.url);
       },
-      previewCallback(file) {
-        const viewer = this.$el.querySelector('.images').$viewer
+      previewCallback (file) {
+        const viewer = this.$el.querySelector('.images').$viewer;
         console.log(viewer);
-        viewer.show()
+        viewer.show();
       },
-      exceedCallback() {
+      exceedCallback () {
         Message.error('最大上传文件个数超出'  + this.limit + '个了');
       },
-      errorCallback(err, file, fileList) {
+      errorCallback (err, file, fileList) {
         this.urlList = fileList.map((i) => i.url);
       }
     }
-  }
+  };
 </script>
 
 <style lang="scss" scoped></style>

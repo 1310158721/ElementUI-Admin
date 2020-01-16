@@ -122,7 +122,7 @@ router.beforeEach((to, from, next) => {
       } else {
         cacheRoutes = jsCookie.get('cacheRoutes') ? JSON.parse(jsCookie.get('cacheRoutes')) : [];
         if (!cacheRoutes.filter((i) => i.path === to.path).length && !to.meta.isNotMenu) {
-          cacheRoutes = [...cacheRoutes, { path: to.path, title: to.meta && to.meta.title }]
+          cacheRoutes = [...cacheRoutes, { path: to.path, title: to.meta && to.meta.title }];
         }
         jsCookie.set('cacheRoutes', JSON.stringify(cacheRoutes));
         next();
