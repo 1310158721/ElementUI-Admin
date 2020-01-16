@@ -82,6 +82,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* breadcrumb transition */
+.tabs-enter-active,
+.tabs-leave-active {
+  transition: all .1s;
+}
+
+.tabs-enter,
+.tabs-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.tabs-move {
+  transition: all .1s;
+}
+
+.tabs-leave-active {
+  position: absolute;
+}
+
 .my-tab-routes {
   height: 32px;
   box-sizing: border-box;

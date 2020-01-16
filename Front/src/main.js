@@ -12,9 +12,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import '@/components/Global';
 
+import 'viewerjs/dist/viewer.css';
+import Viewer from 'v-viewer';
+
 Vue.prototype.$axios = axios;
 
 Vue.use(ElementUI);
+Vue.use(Viewer, {
+  defaultOptions: {
+    zIndex: 9999
+  }
+});
 
 Vue.config.productionTip = false;
 
