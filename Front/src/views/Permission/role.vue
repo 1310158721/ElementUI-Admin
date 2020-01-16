@@ -2,6 +2,7 @@
   <div class="role-permission-wrapper">
     <div class="button-wrapper">
       <el-button type="primary" class="mgr-20" size="small" @click="addRole"
+              v-permission="'SUPERADMIN'"
         >新增角色</el-button
       >
       <el-date-picker
@@ -59,7 +60,8 @@
               @click="throttleHandleEdit(scope.row)"
               >编辑权限</el-button
             >
-            <el-button type="warning" size="mini" @click="handleDel(scope.row)"
+            <el-button type="warning" size="mini" @click="handleDel(scope.row)" v-if='scope.row.role !== "SUPERADMIN"'
+              v-permission="'SUPERADMIN'"
               >删除</el-button
             >
           </template>
@@ -213,7 +215,6 @@ export default {
     },
     closeEditPermissionDialog () {
       this.permissionDialogVisible = false;
-      this.getRoleList();
     },
     addRole () {
       this.addRoleDialog = true;

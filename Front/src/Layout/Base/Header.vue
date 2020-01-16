@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <i class="iconfont collapse-icon" :class="collapseClass" @click='collapseIconClick' />
+    <i class="iconfont collapse-icon" :class="collapseClass" @click='collapseIconClick' v-if='$store.state.isFixedSystemAside' />
     <my-breadcrumb />
     <div style="flex: 1;"></div>
     <UserCenter />

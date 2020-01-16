@@ -1,76 +1,109 @@
-{
-  "result": [
-    {
-      "title": "Dashboard",
-      "children": null,
-      "permission": "DASHBOARD"
-    },
-    {
-      "title": "路由嵌套",
-      "children": [
-        {
-          "title": "菜单1",
-          "children": [
-            {
-              "title": "菜单1-1",
-              "children": null,
-              "permission": "MENU1-1"
-            },
-            {
-              "title": "菜单1-2",
-              "children": [
-                {
-                  "title": "菜单1-2-1",
-                  "children": null,
-                  "permission": "MENU1-2-1"
-                },
-                {
-                  "title": "菜单1-2-2",
-                  "children": null,
-                  "permission": "MENU1-2-2"
-                },
-                {
-                  "title": "菜单1-2-3",
-                  "children": null,
-                  "permission": "MENU1-2-3"
-                }
-              ]
-            },
-            {
-              "title": "菜单1-3",
-              "children": null,
-              "permission": "MENU1-3"
-            }
-          ]
-        },
-        {
-          "title": "菜单2",
-          "children": null,
-          "permission": "MENU2"
-        }
-      ]
-    },
-    {
-      "title": "组件",
-      "children": [
-        {
-          "title": "Echarts",
-          "children": [
-            {
-              "title": "Pie",
-              "children": null,
-              "permission": "PIE"
-            }
-          ]
-        },
-        {
-          "title": "BaiduMap",
-          "children": null,
-          "permission": "BAIDUMAP"
-        }
-      ]
-    }
-  ],
-  "msg": "请求成功",
-  "status": 0
-}
+[
+  {
+    "title": "Dashboard",
+    "children": null,
+    "permission": "DASHBOARD",
+    "icon": "icon-shouye"
+  },
+  {
+    "title": "路由嵌套",
+    "children": [
+      {
+        "title": "菜单1",
+        "permission": "MENU1",
+        "children": [
+          {
+            "title": "菜单1-1",
+            "children": null,
+            "permission": "MENU1-1"
+          },
+          {
+            "title": "菜单1-2",
+            "permission": "MENU1-2",
+            "children": [
+              {
+                "title": "菜单1-2-1",
+                "children": null,
+                "permission": "MENU1-2-1"
+              },
+              {
+                "title": "菜单1-2-2",
+                "children": null,
+                "permission": "MENU1-2-2"
+              },
+              {
+                "title": "菜单1-2-3",
+                "children": null,
+                "permission": "MENU1-2-3"
+              }
+            ]
+          },
+          {
+            "title": "菜单1-3",
+            "children": null,
+            "permission": "MENU1-3"
+          }
+        ]
+      },
+      {
+        "title": "菜单2",
+        "children": null,
+        "permission": "MENU2"
+      }
+    ],
+    "permission": "NESTEDROUTER",
+    "icon": "icon-nested"
+  },
+  {
+    "title": "组件",
+    "permission": "COMPONENTS",
+    "children": [
+      {
+        "title": "Echarts",
+        "permission": "ECHARTS",
+        "children": [
+          {
+            "title": "Pie",
+            "children": null,
+            "permission": "PIE"
+          }
+        ]
+      },
+      {
+        "title": "BaiduMap",
+        "children": null,
+        "permission": "BAIDUMAP"
+      }
+    ]
+  },
+  {
+    "title": "权限系统",
+    "icon": "icon-quanxianguanli-",
+    "permission": "PERMISSIONSYSTEM",
+    "children": [
+      {
+        "title": "角色权限",
+        "children": null,
+        "permission": "SUPERADMIN"
+      }
+    ]
+  },
+  {
+    "title": "待办事项",
+    "children": null,
+    "permission": "WAITINGTODO",
+    "icon": "icon-daibantixing",
+    "buttons": [
+      {
+        "title": "TEST1",
+        "permission": "TEST1",
+        "children": null
+      },
+      {
+        "title": "TEST2",
+        "permission": "TEST2",
+        "children": null
+      }
+    ]
+  }
+]

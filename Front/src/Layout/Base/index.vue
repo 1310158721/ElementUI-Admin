@@ -3,8 +3,8 @@
     <my-aside />
     <el-container class="app-main-wrapper">
       <my-header />
-      <my-tab />
-      <el-main>
+      <my-tab v-if='$store.state.isShowSystemTabView' />
+      <el-main class="my-main">
         <router-view />
       </el-main>
     </el-container>
@@ -45,6 +45,9 @@ export default {
   .app-main-wrapper {
     display: flex;
     flex-direction: column;
+    .my-main {
+      flex: 1;
+    }
   }
 }
 </style>

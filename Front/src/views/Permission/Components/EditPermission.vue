@@ -80,11 +80,14 @@
         <el-tree
           :data="editPermissionModel.list"
           show-checkbox
-          default-expand-all
           node-key="permission"
-          :default-checked-keys="editPermissionModel.permission"
           ref="tree"
-          highlight-current
+          check-on-click-node
+          default-expand-all
+          check-strictly
+          :default-checked-keys="[...editPermissionModel.permission, undefined]"
+          expand-on-click-node
+          @node-click="nodeClick"
           :props="defaultProps"
         />
       </el-form-item>
@@ -230,6 +233,7 @@ export default {
       return result;
     },
     editPermissionDialogSure () {
+      console.log(this.$refs.tree.getCheckedKeys());
       this.$confirm('此操作需要刷新页面才能生效, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -253,6 +257,27 @@ export default {
             message: '已取消删除'
           });
         });
+    },
+    nodeClick(data, node) {
+      this.childNodesChange(node);
+      this.parentNodesChange(node);
+    },
+    childNodesChange(node) {
+      let len = node.childNodes.length;
+      for (let i = 0; i < len; i++) {
+        node.childNodes[i].checked = false;
+        this.childNodesChange(node.childNodes[i]);
+      }
+    },
+    parentNodesChange(node) {
+      if (node.parent) {
+        for (let key in node) {
+          if (key == "parent") {
+            node[key].checked = true;
+            this.parentNodesChange(node[key]);
+          }
+        }
+      }
     }
   },
   created () {},

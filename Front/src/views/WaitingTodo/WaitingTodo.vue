@@ -281,6 +281,7 @@ export default {
   }
   .table-wrapper {
     flex: 1;
+    height: 100%;
   }
   .pagination-wrapper {
     height: 32px;

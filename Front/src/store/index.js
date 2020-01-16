@@ -7,7 +7,10 @@ export default new Vuex.Store({
   state: {
     menuList: [],
     hasPermission: [],
-    layoutConfigDrawer: false
+    layoutConfigDrawer: false,
+    isShowSystemTabView: true,
+    isFixedSystemAside: true,
+    isShowSystemLogo: false
   },
   mutations: {
     // 重置 vuex 的 menulist(导航栏数据)

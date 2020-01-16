@@ -1,10 +1,44 @@
 <template>
   <el-drawer
-    size='600px'
+    size='260px'
+    class="global-system-config"
     :visible.sync="$store.state.layoutConfigDrawer"
     :before-close='handleClose'
     :with-header="false">
-    <span>我来啦!</span>
+    <div class="body-content">
+      <h3 class="drawer-title">系统布局配置</h3>
+      <div class="drawer-item">
+        <span class="item-tip">开启 Tags-View</span>
+        <span class="item-handler">
+          <el-switch
+            v-model="$store.state.isShowSystemTabView"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          />
+        </span>
+      </div>
+      <div class="drawer-item">
+        <span class="item-tip">固定 Aside</span>
+        <span class="item-handler">
+          <el-switch
+            v-model="$store.state.isFixedSystemAside"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          />
+        </span>
+      </div>
+
+      <div class="drawer-item">
+        <span class="item-tip">侧边栏 Logo</span>
+        <span class="item-handler">
+          <el-switch
+            v-model="$store.state.isShowSystemLogo"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          />
+        </span>
+      </div>
+    </div>
   </el-drawer>
 </template>
 
@@ -21,7 +55,6 @@ export default {
   methods: {
     ...mapMutations(['SETLAYOUTCONFIGDRAWER']),
     handleClose () {
-      console.log('handleClose');
       this.SETLAYOUTCONFIGDRAWER(false);
     }
   },
@@ -31,4 +64,32 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.global-system-config {
+  /deep/.el-drawer {
+    outline: none;
+    .el-drawer__body {
+      padding: 24px;
+      box-sizing: border-box;
+      .drawer-title {
+        font-size: 14px;
+        margin: 14px 0 12px;
+      }
+      .drawer-item {
+        display: flex;
+        flex-direction: row;
+        margin: 12px 0;
+        .item-tip {
+          flex: 1;
+          font-size: 14px;
+          color: rgba(0,0,0,.65);
+        }
+        .item-handler {
+          width: 50px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div>Dashboard</div>
+  <div class="dashboard">Dashboard</div>
 </template>
 
 <script>
@@ -18,4 +18,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dashboard {
+  height: 2000px;
+}
+</style>

@@ -52,6 +52,18 @@ class USER {
     }
   }
 
+  dealListButtonsPermission(list) {
+    list.map((i) => {
+      if (i.children && i.children.length) {
+        this.dealListButtonsPermission(i.children);
+      } else {
+        if (i.buttons) {
+          i.children = i.buttons;
+        }
+      }
+    })
+  }
+
   /**
    * 用户登录接口
    */
@@ -204,6 +216,9 @@ class USER {
       $axios.get('http://127.0.0.1:9000/api/getMenuList', { params: { roleId, inside: true } })
         .then((response) => {
           const { status, result, msg } = response.data;
+          const { list } = result;
+          console.log(list);
+          this.dealListButtonsPermission(list);
           // 处理 list 字段
           // const { list } = result;
           // this.deal(list);
