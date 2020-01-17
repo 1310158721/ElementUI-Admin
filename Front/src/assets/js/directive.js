@@ -20,7 +20,14 @@ Vue.directive('clipboard', {
     el.style.cursor = 'pointer';
     // 兼容外部元素点击事件，在点击事件后执行（可以通过外部元素设置属性来获取数据）
     el.onclick = () => {
-      const clipBoardData = el.getAttribute('clipboard-data');
+      const { value } = binding;
+      if (!value && !el.getAttribute('data-clipboard')) {
+        Message.error('复制内容不能为空');
+        return false;
+      }
+      
+      // 指令有传值则取该值，没有则取指令绑定元素的 clipboard-data 属性值
+      const clipBoardData = value || el.getAttribute('data-clipboard');
       const inputDom = document.createElement('input');
       inputDom.value = clipBoardData;
       document.body.appendChild(inputDom);
